@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @RestController
 // con esto unificamos las rutas a nivel de clase, todos responderan a esta ruta
@@ -32,15 +33,21 @@ public class CustomerContoller {
 
     ));
 
-    // metodo que servira como endpoint
+    // Metodo que servira como endpoint
+    // El endpoint recibira solicitudes de tipo GetMapping, la diferencia es que no
+    // Estamos usando GetMapping porque no estamos mapeando nada
 
-    @GetMapping
+    // Se aplico a nivel de metodo
+    @RequestMapping(method = RequestMethod.GET)
+    // @GetMapping
     public List<Customer> getCustomers() {
         return customers;
     }
 
-    // encuentra el cliente por su nombre de usuario
-    @GetMapping("/{username}")
+    // Encuentra el cliente por su nombre de usuario
+    // Se aplico a nivel de metodo
+    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
+    // @GetMapping("/{username}")
     public Customer getClient(@PathVariable String username) {
         for (Customer c : customers) {
             if (c.getUsername().equalsIgnoreCase(username)) {
@@ -50,14 +57,17 @@ public class CustomerContoller {
         return null;
     }
 
-    @PostMapping
+    @RequestMapping(method = RequestMethod.POST)
+    // @PostMapping
     public Customer postClient(@RequestBody Customer customer) {
         customers.add(customer);
         return customer;
     }
 
     // aqui estamos actualizando un cliente, mediante postman
-    @PutMapping
+
+    @RequestMapping(method = RequestMethod.PUT)
+    // @PutMapping
     public Customer putClient(@RequestBody Customer customer) {
         for (Customer c : customers) {
             if (c.getId() == customer.getId()) {
@@ -72,7 +82,8 @@ public class CustomerContoller {
     }
 
     // aqui estamos eliminando un cliente
-    @DeleteMapping("/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    // @DeleteMapping("/{id}")
     public Customer deleteClient(@PathVariable int id) {
         for (Customer c : customers) {
             if (c.getId() == id) {
@@ -85,8 +96,8 @@ public class CustomerContoller {
     }
 
     // En este metodo haremos modificaciones especificas
-
-    @PatchMapping
+    @RequestMapping(method = RequestMethod.PATCH)
+    // @PatchMapping
     public Customer patchClient(@RequestBody Customer customer) {
 
         for (Customer c : customers) {
