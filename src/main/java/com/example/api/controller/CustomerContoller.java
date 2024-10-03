@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
-
-
+// con esto unificamos las rutas a nivel de clase, todos responderan a esta ruta
+@RequestMapping("/clients")
 
 public class CustomerContoller {
 
@@ -33,13 +34,13 @@ public class CustomerContoller {
 
     // metodo que servira como endpoint
 
-    @GetMapping("/clients")
+    @GetMapping
     public List<Customer> getCustomers() {
         return customers;
     }
 
     // encuentra el cliente por su nombre de usuario
-    @GetMapping("/clients/{username}")
+    @GetMapping("/{username}")
     public Customer getClient(@PathVariable String username) {
         for (Customer c : customers) {
             if (c.getUsername().equalsIgnoreCase(username)) {
@@ -49,14 +50,14 @@ public class CustomerContoller {
         return null;
     }
 
-    @PostMapping("/clients")
+    @PostMapping
     public Customer postClient(@RequestBody Customer customer) {
         customers.add(customer);
         return customer;
     }
 
     // aqui estamos actualizando un cliente, mediante postman
-    @PutMapping("/clients")
+    @PutMapping
     public Customer putClient(@RequestBody Customer customer) {
         for (Customer c : customers) {
             if (c.getId() == customer.getId()) {
@@ -71,10 +72,10 @@ public class CustomerContoller {
     }
 
     // aqui estamos eliminando un cliente
-    @DeleteMapping("/clients/{ID}")
-    public Customer deleteClient(@PathVariable int ID) {
+    @DeleteMapping("/{id}")
+    public Customer deleteClient(@PathVariable int id) {
         for (Customer c : customers) {
-            if (c.getId() == ID) {
+            if (c.getId() == id) {
                 customers.remove(c);
                 System.out.println("Se elimino un cliente");
                 return c;
@@ -85,7 +86,7 @@ public class CustomerContoller {
 
     // En este metodo haremos modificaciones especificas
 
-    @PatchMapping("/clients")
+    @PatchMapping
     public Customer patchClient(@RequestBody Customer customer) {
 
         for (Customer c : customers) {
